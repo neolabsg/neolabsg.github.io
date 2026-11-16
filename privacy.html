@@ -1,75 +1,94 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Neo Sudoku Privacy Policy</title>
-<style>
-:root{--bg:#f7f5f1;--fg:#1d1a16;--mut:#5c554c;--line:#e3ddd3;--a:#a8622d}
-@media (prefers-color-scheme:dark){:root{--bg:#141210;--fg:#f0ebe3;--mut:#b4ab9f;--line:#2e2a25;--a:#e9a066}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:720px;margin:0 auto;padding:32px 16px 64px}
-h1{font-size:28px;margin:0 0 4px}h2{font-size:19px;margin:32px 0 8px}
-p,li{color:var(--fg)}.mut{color:var(--mut);font-size:14px}
-a{color:var(--a)}ul{padding-left:20px}li{margin:4px 0}
-hr{border:0;border-top:1px solid var(--line);margin:32px 0}
-</style>
-</head>
-<body>
-<main>
-<h1>Neo Sudoku Privacy Policy</h1>
-<p class="mut">Effective date: 16 November 2026</p>
+# Neo Sudoku: Project Status and Session Handoff
 
-<p>This policy explains what information the Neo Sudoku app for Android ("the app") uses, why, and the choices you have. The app is made by [DEVELOPER NAME] ("we", "us").</p>
+**Updated:** 23 Oct 2026
+**Live build:** https://claude.ai/artifact/YFMrxNt81KXeZXFygfNvv8 (single self-contained HTML file)
+**Stack:** plain HTML/CSS/JS, no build step. Android app planned via Capacitor wrapper (not started).
+**Abandoned:** the earlier Jetpack Compose project (neo-sudoku.zip). Do not resume it.
 
-<h2>The short version</h2>
-<ul>
-<li>You don't need an account. We don't ask for your name, email, location, contacts or photos.</li>
-<li>Your games, settings, statistics, goals and medals are saved only on your phone. We never receive them.</li>
-<li>The free version shows ads from Google AdMob. Google collects some device information to show and measure those ads, as described below.</li>
-<li>If you buy "Remove ads", Google Play handles the payment. We never see your card or payment details.</li>
-</ul>
+## Implemented (all published)
+- Classic Sudoku, unique-solution puzzles, 4 difficulties graded by human techniques (naked singles, hidden singles, pairs/locked candidates, advanced).
+- Killer Sudoku: cages with sums, unique-solution generator, cage highlight, cage info strip (sum, cell count, "need N").
+- Home screen: per-mode Continue cards (Classic and Killer saved separately), Daily Challenge with streak, expanding Classic/Killer tiles.
+- Unlocks: Hard needs 10 solved Medium, Expert needs 10 solved Hard, per mode. Daily solves do not count. Tap the title 5 times for test mode (unlock all).
+- Game: notes, undo, erase, 3 hints, 3 lives, same-number and peer highlight, auto-save/resume, best times, floating pill bar.
+- Themes (user decisions 21 Oct): exactly three switches in Look & sound: Style (Classic / Neumorphic / Neon), Mode (Light / Dark; with Neon only Dark is shown), Colours (Colourful / Single colour; single colour opens the 10-accent picker of floating circles). Neon = true black everywhere (page, panels, cells, cards, sheet, bar; cells are faint outlines in their box colour); Neon app chrome (user reference 21 Oct, black/lime ticket-app style): pitch-black page, flat near-black tiles for cards, number pad, bar and sheets, and the fluorescent accent used as solid fills with black text (top Continue card, main buttons, selected options, active switch segments, switches when on, streak and hint badges); no glowing edges. Selection in every style (user request 21 Oct): every cell in the selected row, column and box gets its own edge in the selection colour (box colour when colourful, else the accent): a deeper shade in Light, a soft glow in Dark, around the raised tile in Neumorphic; the selected cell and matching numbers fill with that colour with a readable digit; Killer's selected cage stays a fill. Neon + colourful also colours the app chrome with the fluorescent palette (Continue card, progress bars, streak, icons, switch segments, buttons). Neon grid (user picked mockup A, 21 Oct): plain dark cells with white numbers; the selected cell and matching numbers fill with the selection colour (selected cell's box colour when colourful, else the accent) and their number turns black; every cell in the selected row, column and box gets a glowing edge. Neon Killer: cages are faint grey dashed outlines; the selected cage is a soft fill of the selection colour inside its cells, so it never overlaps the glowing edges. Rejected for Neon: fluorescent tiles, per-cell rings, glowing cage tubes, strip outlines (intersecting lines); switches/buttons get thin glowing accent edges. Also neon-tube box outlines (halo + faint inner glow) in each box's colour (colourful) or the accent (single); your digits glow and take their box colour when colourful; givens stay white; selected cell is a bright fill with a glow; bar, home cards and number pad get glowing accent edges. Classic Dark and Neumorphic Dark follow the user's dark-neumorphism reference (21 Oct): a fixed cool slate base (hue 222, independent of the accent) kept close to black (backgrounds 5-7% lightness, user request 21 Oct), off-white text, deep black shadows; Neumorphic adds a soft sheen on raised surfaces; the accent is a two-tone gradient (accent into its neighbouring hue) on the selected cell and main buttons. Never tint dark surfaces with the accent. System mode and the old glow switch are gone; old saved choices migrate (AMOLED -> Neon). Switches, swatches and sound/haptics switches are neumorphic and animated in every style.
+- Win celebration (user picked option B from mockups 21 Oct): a card springs up and fills up to 3 stars. Stars = lower of a time score and a hint score (no hints = 3, one = 2, more = 1); time targets per mode and difficulty in `PAR`. Shows title, time, "New best by" and unlock badges, a tip for the next star, Home / Next puzzle (dailies: Another day). Star dings, confetti, haptics. The old full-grid spin on win was removed.
+- Grid (all styles, user request 21 Oct): each 3x3 box is a separate rounded panel with a clear gap; cells are equal square tiles. Colourful gives each box its own pastel; single colour uses one accent-tinted panel colour.
+- Killer cages (user picked from mockups 21 Oct): each cage is a soft tint (6 fixed hues, neighbouring cages always differ); no dashed lines. Only the selected cage gets a gold outline. Row/column highlight is an overlay so cage tints stay visible.
+- 3D celebrations: row/column flip, box flip, full-puzzle grid spin plus 3D confetti.
+- Smart hints (Classic): naked/hidden single, pointing pair/triple, box-line reduction, naked/hidden pair; first tap names the technique (costs a hint), "Show answer" is free. Killer hints only highlight a cell and its cage. Auto-notes button in the bar (5 bar slots: Undo, Erase, Notes, Auto, Hint).
+- Daily Challenge calendar: per-date puzzles (difficulty by weekday), solved dates highlighted, backfill allowed, streak counts only same-day solves. Daily saves are per date (`daily-YYYY-MM-DD`).
+- Monthly coins (user rules 21 Oct): a month's coin is earned when every day of it is solved; backfilled days count; future days are locked, so the current month can only complete on its last day. Each month has its own coloured coin (`coinSVG`, hues in `MHUE`): greyed dashed outline until earned, shown beside the month name on the calendar with progress text; when a daily solve completes a month the coin flips in on the win card (`COINNEW`, set in `dailyDone`); earned coins are collected on the stats screen. Derived from `DS.done` (`fullMonths`), nothing extra is stored.
+- Stats screen (user picked bento design C, 21 Oct): solid streak hero (selection colour, readable text) with last-7-day dots, win-rate ring, stars earned (+ average), puzzles won (+ dailies, lost), time played (+ fastest), next-unlock progress, 8 achievements derived from history, best times. Themed in every style (in Glass the hero is clear glass with theme-coloured text, 29 Oct); numbers count up, ring and bar animate (instant with reduced motion); no gradients. Stars, rated games and three-star solves are counted from 21 Oct onward (`ST.stars`, `ST.rated`, `ST.three`). Scrollbars are hidden app-wide. Slide transitions between home, game and stats.
+- Sound effects (synthesized Web Audio, no files) with Sound and Haptics switches in the Look & sound sheet.
 
-<h2>Information stored on your phone</h2>
-<p>The app saves your puzzles in progress, settings (such as theme and sound), statistics, daily streak, goals and medals in the app's private storage on your phone. This information is not sent to us or to anyone else. Uninstalling the app, or clearing its data in your phone's settings, deletes it.</p>
+## Android app (started 22 Oct, details in docs/ANDROID.md)
+- Capacitor 8 project in `android/` (plugins: App, Haptics, SplashScreen, @capacitor-community/admob). Icon/splash from `scripts/make-icons.js`.
+- In `index.html`: `NATIVE`/`PLG()` bridge (no-ops in a browser); haptics via the Haptics plugin; back gesture via `goBack()` (top sheet -> open tile -> home -> exit); save on app pause.
+- Ads (`ADS`, `AD`, `adDue`, `maybeAd`, `rewardAd`): interstitial after every finished puzzle, shown at the next transition (leaving the game, starting a puzzle, closing the result); rewarded ad per extra hint once the 3 free ones are used ("+" on the hint badge, offer in the info strip). Google test IDs, `testing:true`.
+- Ad-free build: `build-www.js --adfree` injects `window.NEO_ADS=false`; Gradle `-PadFree=true` gives `com.neosudoku.app.adfree` / "Neo Sudoku Ad-free". In the browser extra hints are free too.
+- JDK: portable Microsoft OpenJDK 21.0.12 in `tools/jdk/` (gitignored, checksum verified); `build-apk.js` uses it when JAVA_HOME is unset. First ad-free debug APK built 22 Oct (9.2 MB, targetSdk 36, minSdk 24) and sent to the user. Not yet tested on the phone.
 
-<h2>Advertising (Google AdMob)</h2>
-<p>The free version of the app uses Google AdMob, a service of Google LLC, to show a full-screen ad after a finished puzzle and an optional ad you can watch for an extra hint. To do this, the Google Mobile Ads SDK collects and processes information from your device, such as:</p>
-<ul>
-<li>your device's advertising ID, and device and app information (for example device model, operating system version and app version);</li>
-<li>your IP address, which may be used to estimate your general location (country or region);</li>
-<li>how you interact with ads (for example whether an ad was shown or clicked), and diagnostic information about ad performance.</li>
-</ul>
-<p>Google uses this information to deliver, measure and improve ads, to prevent fraud and, where you allow it, to personalise ads. We do not receive this information in a form that identifies you. For details, see <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use its services</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+## Fixed 22 Oct (APK playtest)
+- Red removed from every theme palette (red = wrong entry): `ACC` has no Rose (Orange 30), Colourful boxes use fixed hues `CF`, Neon `FL` and cage `KTH` avoid 335..25; old saved accent indices migrate via the `av:2` marker; a test enforces it.
+- Correct entry flashes green (`fx(i,"good")`, also under reduced motion since it is colour only).
+- `buzz()` takes meanings (`HAP`: tick, ok, line, box, error, win) mapped to native Haptics impact/notification; browser falls back to longer vibration patterns.
+- Switches text only, no knob dots; `.swt.on` fills with the accent. Neumorphic `.tile.open` keeps the card colour. Brand title scales and never wraps. Calendar: flat days, no tick badges, short "N / M days solved".
 
-<h2>Your consent and choices</h2>
-<ul>
-<li><strong>EEA, UK and Switzerland:</strong> before ads are personalised, the app shows Google's consent message, where you can accept, refuse or choose your options. You can change your choice at any time from the app's Settings.</li>
-<li><strong>Personalised ads:</strong> you can reset your advertising ID or opt out of personalised ads in your phone's settings (on most phones: Settings, Google, Ads, or Settings, Privacy, Ads).</li>
-<li><strong>No ads:</strong> the one-time "Remove ads" purchase turns off all ads in the app.</li>
-</ul>
+## Fixed 22 Oct (phone playtest)
+- A correctly placed number could be overwritten or erased. Now locked (`fixedCell` guard in `input` and `erase`); wrong digits can still be changed; Undo still steps back through history.
 
-<h2>In-app purchase</h2>
-<p>"Remove ads" is sold through Google Play's billing system. Google processes the payment under its own terms and privacy policy. The app only learns whether the purchase was made, so it can turn ads off and restore the purchase if you reinstall.</p>
+## Fixed 21 Oct (from review and playtest)
+- Uneven Neumorphic cell sizes (screenshot from user) -> box-panel grid above.
+- Saves no longer grow to ~93 KB each (undo history trimmed, none kept after a game ends); this would have filled storage after ~2-3 months of dailies.
+- Hint highlights were hidden in Neumorphic.
+- A wrong guess no longer deletes matching pencil marks in neighbouring cells.
+- Killer hints no longer offer a free Show answer. "Check your work" hint is free.
+- End screen no longer says "Clean finish" after mistakes. A daily started on its own date counts for the streak even if finished after midnight.
+- npm scripts work on Windows (`scripts/serve.js`, `scripts/build-www.js`). APK workflow runs only on `v*` tags or manually.
 
-<h2>Children</h2>
-<p>The app is not directed at children under 13, and we do not knowingly collect personal information from them. If you believe a child has provided personal information through the app, contact us and we will help remove it.</p>
+## Verification status
+- 21 Oct: grid, tinted Killer cages and the Look & sound sheet checked in a browser at 375x812 for Pitch Black, Neumorphic Light and Neumorphic Dark. Still not on a real phone.
+- Verified in Node: puzzle uniqueness, difficulty grading (20/20 per level on target), Killer generator, daily-seed determinism, streak and unlock logic, theme token contrast (50 combos pass), theme UI logic with stubbed DOM, celebration trigger logic.
+- NOT verified: any rendering or animation on a real phone (layout, 3D flips, circular reveal, expanding tiles, neumorphic shadows). User has reviewed earlier stages visually and approved them; themes and 3D celebrations are not yet reviewed.
 
-<h2>Data sharing and selling</h2>
-<p>We do not sell your personal information. Apart from the advertising and payment processing by Google described above, the app does not share information with third parties.</p>
+## Known gaps
+- Daily challenge is Classic only (difficulty by weekday: Easy, Medium or Hard).
+- Git repository since 29 Oct (branch `main`, local only). Needs a GitHub remote before the GitHub Actions APK build can run.
+- Android back button not wired (belongs to Capacitor step).
+- Killer difficulty is measured by solver effort, not technique grading.
+- No in-game mute button (sound is toggled in the Look & sound sheet on the home screen).
+- Stats: losses and time played only count from the stats release onward.
 
-<h2>Security and retention</h2>
-<p>Your game data stays on your phone and is removed when you uninstall the app or clear its data. Information collected by Google for ads is kept according to Google's own retention policies.</p>
+## Next task
+See the checklist in `IMPLEMENTATION_PLAN.md` (the tracker). As of 24 Oct (version 58): all three phases of the 23 Oct playtest list are done, including Help/tutorial, the user's splash, system font, auto-pause, Colour shockwave finish, Glass refinement and screen-size adaptation. Next: the user's phone playtest of the APK, then the store-release steps in docs/ANDROID.md. The user tests the web build first, then the ad-free APK (`npm run apk:adfree`).
 
-<h2>Changes to this policy</h2>
-<p>If we change this policy, we will update the effective date above. Significant changes will be noted in the app's store listing.</p>
+## Reference files
+- `docs/reference/neo-sudoku-reference-glass-mock.html` (imported 29 Oct): the current `index.html` plus a mock "Reference glass" look for the Glass style (`data-rg="1"`, CSS block marked `MOCK`): Light is deep-blue frosted glass, Dark is solid charcoal cards with conic rims and white primary buttons; the board is one panel split by measured box dividers (`--gdiv`); seasons hidden. A floating "Reference glass / Now" switcher toggles it. The user first picked "Now", then later on 29 Oct adopted the reference Glass as built in `F:\Suraj Projects\neo-sudoku-project` (version 71); that file is now this folder's `index.html` (version 72 adds weather themes, Glass peer highlight, the calendar popping from the Daily button, corner notes, slower rain). Spring's water drops on the glass were removed the same day (rain kept).
 
-<h2>Contact</h2>
-<p>Questions about this policy or your data: <a href="mailto:[CONTACT EMAIL]">[CONTACT EMAIL]</a></p>
+## Unity port (29 Oct)
+Proposed in `docs/UNITY_PORT_PLAN.md`, tracked in `IMPLEMENTATION_PLAN.md`. Decisions answered 29 Oct (see the plan): native Unity only (no HTML/WebView), Android only, full parity before replacing the Capacitor app, keep `com.neosudoku.app`, web build frozen to bug fixes from now on. Phase 1 core logic done 29 Oct: Unity project `NeoSudoku/`, C# core in `NeoSudoku/Assets/NeoSudoku/Core`, 21 Unity tests passing incl. word-for-word parity with index.html (`npm run test:unity`; regenerate golden data with `npm run unity:golden` only after an intended engine change). Android Build Support and git installed 29 Oct; phase 1 is complete. Phase 2 spike built 29 Oct (native CSS-box renderer, spike scene, editor renders match the web build; see the plan's Progress section). Waiting on: the user's phone test of the spike APK (go/no-go) and an OK to download static Lexend fonts. Unity 6000.6.7f1 is installed without Android Build Support. `index.html` stays the reference until the Unity build is signed off.
 
-<hr>
-<p class="mut">Neo Sudoku · [DEVELOPER NAME]</p>
-</main>
-</body>
-</html>
+30 Oct: web v78 (mode card text centred on its icon); maple leaves demo in `docs/mocks/maple-leaves.html`; web v79: Glass by season with Day/Night (no colour picker; sun by day, moon and stars by night; mock in `docs/mocks/glass-seasons-day-night.html`). Unity: UI cache, half-resolution background and live layer (idle 120 fps on the Moto g85); phone fixes for hint banner, pause veil and FPS readout built and installed; phone re-test of hint reveal, wrong digit, notes, pause and resume still to do.
+
+30 Oct (later): web v80 centres the board and glides it up when a hint card opens (user chose this over a floating card). Unity screens are exported at the Moto's 432x893 and sit below the status bar; Notes dot and readout fixes done; phone checks passed.
+
+30 Oct (end of day): web v81-83 (autumn leaves spread, Glass Night is frosted glass, 8px frost for winter/spring/summer, autumn unchanged). Unity, all checked on the Moto g85: live glass blur through every panel (LiveBackdrop), Glass sun/moon/stars and Day weather, hint card with the column glide, screens at the phone's 432x893 below the status bar, Killer and Mini Killer playable with native cages (user: "seems good for now"). Next: per-phone responsive layout (Galaxy S24), then accents/shapes/selected-cell looks; the phone's screen timeout was set to 10 min during testing (user to restore).
+
+30 Oct (evening, paused by the user): Phase 4 steps 1-6 done and checked on the phone (ember, live home, Continue preview and week row, Statistics, win/lose cards, Daily calendar with playable dailies, Glass end cards blurring the board). Step 7 (splash + screen transitions) is built but unchecked: the old splash video won't decode in Unity on the Moto; next is recording a 1:1 square video from the user's neo-sudoku-splash.html (see IMPLEMENTATION_PLAN), then the phone check, then the user's request to animate the home logo like the splash. The phone's screen timeout is back at its 1-minute default.
+
+31 Oct: web v86 (Glass Light Killer cages 70%). Unity Phase 4 step 7 done and checked on the Moto g85: square splash videos (scripts/unity-splash.js, viewport-only capture), forward/back slides; fixes for square Glass corners, the black-tiled home logo (exporter stop colours) and the Daily card's stale date/button. The Moto has stay-awake while plugged in on for testing (user's request, 31 Oct). A Galaxy Watch also shows in adb: pin commands with ANDROID_SERIAL=ZA222QJ83S. Later 31 Oct: the home logo is the splash's mark (plate and tiles) and forms like the splash at hand-over (scripts/unity-logo.js frames, Render/LogoMark.cs), checked on the phone. The Moto reports its cable as AC power, so stay-awake is `svc power stayon true` (any power); turn off with `adb shell svc power stayon false`. Then the week row's entrance (HomeWeek.cs); Phase 4 is complete. The spike launches on the last home screen viewed (now Glass Dark). Next: Phase 3's leftover responsive layout for any phone size (Galaxy S24), then Phase 5 (settings, help, tutorial).
+
+31 Oct (later): Phase 5 step 1, the Settings page in Unity, checked on the phone (see IMPLEMENTATION_PLAN). Snapshots now ~26 MB (every theme incl. Glass seasons). Next in Phase 5: How to play (help) and the tutorial; later, native restyling for shape/selected cell/highlight/accent/Material 3.
+
+31 Oct (late): Phase 5 complete in Unity (Settings, How to play, tutorial incl. first game, Alphabet mode, Home's mode-card menu), all checked on the Moto. Phone test data changed while testing: new Easy Classic and Killer games, today's daily started. Next: Phase 6 (sound and haptics first, then the theme reveal and celebrations).
+
+2 Nov (end of day, paused by the user): Phase 7 steps 1-2 committed (release builds, icons, AdMob test ads checked on the phone). Uncommitted: the "Remove ads" in-app purchase (Spike/Purchases.cs, Unity IAP 5.4.4, Settings row; store APK builds, row not yet checked on the phone) and a RampAtlas change (rows freed per screen, 1024 rows). Open bug from the user's screenshot: the Glass Light selected cell looks split along a "/" diagonal. The atlas change did NOT fix it (no "atlas full" log; same look). Measured on the phone: the 135deg gradient lightens over the top-left half and is flat over the bottom-right half, and it is lighter than both exported stops (the export is `linear-gradient(135deg, color(srgb .38 .93 .73), rgb(62,234,171))`). Next: compare with the web's selected cell, then check what is drawn over or instead of e-sl (CellStyle, LiveLayer pop, any sheen). The phone's timeout is back to 1 min, lock after 30 s, stay-awake off. AdGuard private DNS was turned off for the ad check: remind the user to re-enable it.
+
+3 Nov: Unity, checked on the Moto g85 (test app): the Paused notice now sits over the grid and no longer survives on Home (GameScreen.OnDestroy); a wrong digit flashes red (soft pulse, mock `docs/mocks/wrong-cell-flash.html`, GameCelebrate.WrongPulse) and stays red even in the selected cell; screen changes are a full-width push with no fades (mock `docs/mocks/stats-transition.html`, option C; SpikeApp.Nav) and Statistics' tiles arrive with the page, numbers count after it lands. Not yet checked: the red digit on Classic's solid selected fill, the other themes. The 2 Nov diagonal-split Glass Light selected cell: ROOT CAUSE FOUND 3 Nov (not the atlas overflow, which was real but separate): CssBox sent the gradient ramp row in the vertex normal, and the canvas batcher transforms normals with the object's scale, so under any scale but 1 the row was multiplied and the box read another gradient (the selected cell is scaled .965; a scaled-down stage on a short phone showed hard diagonal steps in every Glass panel). Fixed by sending the row in uv3.w (CssBox.Quad, CssBox.shader). Verified: Home, Settings and Help at 1080x1920 are clean. Not re-tested on the selected cell itself. The phone is on a 30 min timeout/lock with stay-awake for testing: restore to 1 min / 30 s when done.
+
+
+9 Nov: AdMob wiring for the Unity store build is ready for the user's own IDs (`Spike/AdIds.cs`, tracker F-16): live IDs go into the store build only, everything else keeps Google's test IDs, and the user's phones get test ads. The user is creating the AdMob account and IDs; the step list is in F-16.
+
+## Resumption rule
+The published artifact is the source of truth. In a new session, read it with the Artifact tool (action "read" with the link above), inspect it, then continue. Do not rebuild from scratch.
